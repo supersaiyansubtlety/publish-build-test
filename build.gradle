@@ -2,18 +2,30 @@ plugins {
     id 'java'
 }
 
+final ENV = System.getenv()
+
 group = 'org.example'
-version = '1.0-SNAPSHOT'
+version = "1.0-SNAPSHOT+build.${(ENV.BUILD_NUMBER ? Integer.parseInt(ENV.BUILD_NUMBER) + 1 : 'local' as String)}"
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+tasks.register("fakePublish") {
+    final String projectVersion = project.version
+    inputs.property("projectVersion", projectVersion)
+
+    doLast {
+        println "fakePublish version: ${projectVersion}"
+    }
 }
 
-test {
-    useJUnitPlatform()
+tasks.register("fakePublishFail") {
+    final String projectVersion = project.version
+    inputs.property("projectVersion", projectVersion)
+
+    doLast {
+        println "fakePublishFail version: ${projectVersion}"
+        throw new GradleException()
+    }
 }
