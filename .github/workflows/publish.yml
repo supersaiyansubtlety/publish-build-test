@@ -8,7 +8,7 @@ jobs:
       options: --user root
     steps:
       - name: Install git
-        run: apt-get update && apt-get install -y git-lfs
+        run: apt-get update && apt-get install -y git
       - name: Configure git for container
         run: git config --global --add safe.directory "$(pwd)"
 
