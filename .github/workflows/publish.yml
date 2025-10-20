@@ -23,6 +23,9 @@ jobs:
           continue-after-seconds: 3600
           same-branch-only: true
 
+      - name: Get tags
+        run: git fetch --tags origin
+
       # Check for existing tag created by previous runs of "Increment build number".
       # Extract build number if present, otherwise start at 0.
       - name: Set build number
