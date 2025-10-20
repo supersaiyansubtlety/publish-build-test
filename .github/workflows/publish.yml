@@ -23,7 +23,8 @@ jobs:
           continue-after-seconds: 3600
           same-branch-only: true
 
-      - name: Get tags
+      # Fetch tags because they're used to store build number.
+      - name: Fetch tags
         run: git fetch --tags origin
 
       # Check for existing tag created by previous runs of "Increment build number".
@@ -31,11 +32,7 @@ jobs:
       - name: Set build number
         shell: bash
         run: |
-          git tag
-          tagPattern="build/${{ github.ref }}-build-number-*"
-          echo $tagPattern
-          output=$(git tag -l $tagPattern)
-          echo "output: $output"
+          output=$(git tag -l build/${{ github.ref }}-build-number-*)
           buildNumber=$(if [[ $output ]]; then echo $output | grep -oP "(?<=build-number-)[0-9]+$"; else echo 0; fi)
           echo "BUILD_NUMBER=$buildNumber" >> $GITHUB_ENV
 
