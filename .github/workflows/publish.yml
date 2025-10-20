@@ -8,9 +8,9 @@ jobs:
       options: --user root
     steps:
       - run: apt-get update && apt-get install -y git-lfs
-# Required to run git commands in the container
+      # Required to run git commands in the container
       - name: Configure git
-        run: git config --global --add safe.directory
+        run: git config --global --add safe.directory "$(pwd)"
 
       - uses: actions/checkout@v5
         with:
