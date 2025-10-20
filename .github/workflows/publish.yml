@@ -23,10 +23,14 @@ jobs:
 #      - name: Ensure gradlew is executable
 #        run: chmod +x ./gradlew
 
-      - name: Test git
-        run: |
-          git --version
-          git status
+#      - name: Test git
+#        run: |
+#          git --version
+#          git status
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 2
+      - run: git checkout HEAD^
 
       # Check for existing tag created by previous runs of "Increment build number".
       # Extract build number if present, otherwise start at 0.
