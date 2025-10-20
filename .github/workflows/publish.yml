@@ -24,6 +24,7 @@ jobs:
       # Check for existing tag created by previous runs of "Increment build number".
       # Extract build number if present, otherwise start at 0.
       - name: Set build number
+        uses: actions/checkout@v2
         run: export BUILD_NUMBER=$(output=$(git tag -l build/${{ github.ref }}-build-number-*); if [[ $output ]]; then echo $output | grep -oP "(?<=build-number-)[0-9]+$"; else echo 0; fi);
 
       # Publish before incrementing build number so the build number doesn't needlessly increase in the event of an error.
