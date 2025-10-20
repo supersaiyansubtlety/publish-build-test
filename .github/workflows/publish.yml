@@ -20,8 +20,13 @@ jobs:
           continue-after-seconds: 3600
           same-branch-only: true
 
-      - name: Ensure gradlew is executable
-        run: chmod +x ./gradlew
+#      - name: Ensure gradlew is executable
+#        run: chmod +x ./gradlew
+
+      - name: Test git
+        run: |
+          git --version
+          git status
 
       # Check for existing tag created by previous runs of "Increment build number".
       # Extract build number if present, otherwise start at 0.
