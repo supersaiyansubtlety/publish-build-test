@@ -41,7 +41,7 @@ jobs:
 
       # Publish before incrementing build number so it doesn't needlessly increase in the event of an error.
       - name: Publish
-        run: ./gradlew fakePublish --stacktrace
+        run: ./gradlew fakePublishFail --stacktrace
       # Increment the build number based on tags to allow per branch build numbers, not something GitHub provides by default.
       - name: Increment build number
         id: buildnumber
