@@ -28,6 +28,7 @@ jobs:
       - name: Set build number
         shell: bash
         run: |
+          git tag
           tagPattern="build/${{ github.ref }}-build-number-*"
           echo $tagPattern
           output=$(git tag -l $tagPattern)
