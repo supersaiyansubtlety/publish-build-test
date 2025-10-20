@@ -7,43 +7,44 @@ jobs:
       image: eclipse-temurin:21
       options: --user root
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
-      - uses: gradle/wrapper-validation-action@v2
-
-      # Ensure that releases are not ran in parallel, this ensures that the latest commit is the latest release
-      # See https://github.com/softprops/turnstyle
-      - name: Turnstyle
-        uses: softprops/turnstyle@v1
-        with:
-          continue-after-seconds: 3600
-          same-branch-only: true
-
-#      - name: Ensure gradlew is executable
-#        run: chmod +x ./gradlew
-
-#      - name: Test git
-#        run: |
-#          git --version
-#          git status
       - uses: actions/checkout@v5
         with:
           fetch-depth: 2
       - run: git checkout HEAD^
 
-      # Check for existing tag created by previous runs of "Increment build number".
-      # Extract build number if present, otherwise start at 0.
-      - name: Set build number
-        run: export BUILD_NUMBER=$(output=$(git tag -l build/${{ github.ref }}-build-number-*); if [[ $output ]]; then echo $output | grep -oP "(?<=build-number-)[0-9]+$"; else echo 0; fi);
-
-      # Publish before incrementing build number so the build number doesn't needlessly increase in the event of an error.
-      - name: Publish
-        run: ./gradlew fakePublish --stacktrace
-      # Increment the build number based on tags to allow per branch build numbers, not something GitHub provides by default.
-      - name: Increment build number
-        id: buildnumber
-        uses: onyxmueller/build-tag-number@v1
-        with:
-          token: ${{ secrets.github_token }}
-          prefix: "build/${{ github.ref }}"
+#      - uses: actions/checkout@v4
+#        with:
+#          fetch-depth: '0'
+#      - uses: gradle/wrapper-validation-action@v2
+#
+#      # Ensure that releases are not ran in parallel, this ensures that the latest commit is the latest release
+#      # See https://github.com/softprops/turnstyle
+#      - name: Turnstyle
+#        uses: softprops/turnstyle@v1
+#        with:
+#          continue-after-seconds: 3600
+#          same-branch-only: true
+#
+##      - name: Ensure gradlew is executable
+##        run: chmod +x ./gradlew
+#
+##      - name: Test git
+##        run: |
+##          git --version
+##          git status
+#
+#      # Check for existing tag created by previous runs of "Increment build number".
+#      # Extract build number if present, otherwise start at 0.
+#      - name: Set build number
+#        run: export BUILD_NUMBER=$(output=$(git tag -l build/${{ github.ref }}-build-number-*); if [[ $output ]]; then echo $output | grep -oP "(?<=build-number-)[0-9]+$"; else echo 0; fi);
+#
+#      # Publish before incrementing build number so the build number doesn't needlessly increase in the event of an error.
+#      - name: Publish
+#        run: ./gradlew fakePublish --stacktrace
+#      # Increment the build number based on tags to allow per branch build numbers, not something GitHub provides by default.
+#      - name: Increment build number
+#        id: buildnumber
+#        uses: onyxmueller/build-tag-number@v1
+#        with:
+#          token: ${{ secrets.github_token }}
+#          prefix: "build/${{ github.ref }}"
