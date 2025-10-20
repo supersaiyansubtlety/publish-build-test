@@ -7,14 +7,12 @@ jobs:
       image: eclipse-temurin:21
       options: --user root
     steps:
-      - run: apt-get update && apt-get install -y git-lfs
-      # Required to run git commands in the container
-      - name: Configure git
+      - name: Install git
+        run: apt-get update && apt-get install -y git-lfs
+      - name: Configure git for container
         run: git config --global --add safe.directory "$(pwd)"
 
       - uses: actions/checkout@v4
-#        with:
-#          fetch-depth: '0'
       - uses: gradle/wrapper-validation-action@v2
 
       # Ensure that releases are not ran in parallel, this ensures that the latest commit is the latest release
@@ -25,11 +23,6 @@ jobs:
           continue-after-seconds: 3600
           same-branch-only: true
 
-#      - name: Test git
-#        run: |
-#          git --version
-#          git status
-
       # Check for existing tag created by previous runs of "Increment build number".
       # Extract build number if present, otherwise start at 0.
       - name: Set build number
@@ -38,12 +31,11 @@ jobs:
           output=$(git tag -l build/${{ github.ref }}-build-number-*)
           buildNumber=$(if [[ $output ]]; then echo $output | grep -oP "(?<=build-number-)[0-9]+$"; else echo 0; fi)
           echo "BUILD_NUMBER=$buildNumber" >> $GITHUB_ENV
-#        run: export BUILD_NUMBER=$(output=$(git tag -l build/${{ github.ref }}-build-number-*); if [[ $output ]]; then echo $output | grep -oP "(?<=build-number-)[0-9]+$"; else echo 0; fi);
 
       - name: Ensure gradlew is executable
         run: chmod +x ./gradlew
 
-      # Publish before incrementing build number so the build number doesn't needlessly increase in the event of an error.
+      # Publish before incrementing build number so it doesn't needlessly increase in the event of an error.
       - name: Publish
         run: ./gradlew fakePublish --stacktrace
       # Increment the build number based on tags to allow per branch build numbers, not something GitHub provides by default.
@@ -51,5 +43,5 @@ jobs:
         id: buildnumber
         uses: onyxmueller/build-tag-number@v1
         with:
-          token: ${{ secrets.github_token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           prefix: "build/${{ github.ref }}"
