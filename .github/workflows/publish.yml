@@ -8,6 +8,8 @@ jobs:
       options: --user root
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
       - uses: gradle/wrapper-validation-action@v2
 
       # Ensure that releases are not ran in parallel, this ensures that the latest commit is the latest release
@@ -21,10 +23,6 @@ jobs:
       - name: Ensure gradlew is executable
         run: chmod +x ./gradlew
 
-      - name: Git checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: '0'
       # Check for existing tag created by previous runs of "Increment build number".
       # Extract build number if present, otherwise start at 0.
       - name: Set build number
