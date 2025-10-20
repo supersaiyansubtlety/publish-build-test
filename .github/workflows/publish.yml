@@ -11,6 +11,10 @@ jobs:
         with:
           fetch-depth: 2
       - run: apt-get update && apt-get install -y git-lfs
+# Required to run git commands in the container
+      - name: Configure git
+        run: git config --global --add safe.directory "$(pwd)"
+
       - run: git checkout HEAD^
 
 #      - uses: actions/checkout@v4
