@@ -33,8 +33,8 @@ jobs:
         shell: bash
         run: |
           output=$(git tag -l build/${{ github.ref }}-build-number-*)
-          buildNumber=$(if [[ $output ]]; then echo $output | grep -oP "(?<=build-number-)[0-9]+$"; else echo 0; fi)
-          echo "BUILD_NUMBER=$buildNumber" >> $GITHUB_ENV
+          priorBuildNumber=$(if [[ $output ]]; then echo $output | grep -oP "(?<=build-number-)[0-9]+$"; else echo 0; fi)
+          echo "BUILD_NUMBER=$((priorBuildNumber + 1))" >> $GITHUB_ENV
 
       - name: Ensure gradlew is executable
         run: chmod +x ./gradlew

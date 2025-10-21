@@ -5,7 +5,7 @@ plugins {
 final ENV = System.getenv()
 
 group = 'org.example'
-version = "1.0-SNAPSHOT+build.${(ENV.BUILD_NUMBER ? Integer.parseInt(ENV.BUILD_NUMBER) + 1 : 'local' as String)}"
+version = "1.0-SNAPSHOT+build.${(ENV.BUILD_NUMBER ? ENV.BUILD_NUMBER : 'local')}"
 
 repositories {
     mavenCentral()
