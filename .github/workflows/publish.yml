@@ -13,6 +13,8 @@ jobs:
         run: git config --global --add safe.directory "$(pwd)"
 
       - uses: actions/checkout@v4
+        with:
+          fetch-tags: true
       - uses: gradle/wrapper-validation-action@v2
 
       # Ensure that releases are not ran in parallel, this ensures that the latest commit is the latest release
@@ -24,8 +26,8 @@ jobs:
           same-branch-only: true
 
       # Fetch tags because they're used to store build number.
-      - name: Fetch tags
-        run: git fetch --tags origin
+#      - name: Fetch tags
+#        run: git fetch --tags origin
 
       # Check for existing tag created by previous runs of "Increment build number".
       # Extract build number if present, otherwise start at 0.
